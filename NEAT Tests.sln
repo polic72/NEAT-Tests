@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEAT Tests", "NEAT Tests\NEAT Tests.csproj", "{6509F0A3-062C-4026-98F6-C03C085EE07D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6509F0A3-062C-4026-98F6-C03C085EE07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6509F0A3-062C-4026-98F6-C03C085EE07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6509F0A3-062C-4026-98F6-C03C085EE07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6509F0A3-062C-4026-98F6-C03C085EE07D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77CDF3E4-B669-448C-B888-46D4F03A4868}
+	EndGlobalSection
+EndGlobal
