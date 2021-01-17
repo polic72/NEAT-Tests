@@ -46,7 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gene_\ConnectionGene.cs" />
+    <Compile Include="Gene_\Gene.cs" />
+    <Compile Include="Gene_\Genome.cs" />
+    <Compile Include="Gene_\NodeGene.cs" />
     <Compile Include="Helpers\RandomHashSet.cs" />
+    <Compile Include="NEAT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
