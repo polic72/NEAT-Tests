@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using NEAT_Tests.Gene_;
+
 namespace NEAT_Tests
 {
     /// <summary>
@@ -91,6 +93,31 @@ namespace NEAT_Tests
             }
 
             return false;
+        }
+
+
+        /// <summary>
+        /// Adds the given gene sorted by innovation number. T must be castable as a Gene.
+        /// </summary>
+        /// <param name="gene">The gene to add.</param>
+        public void Add_Sorted_Gene(Gene gene)
+        {
+            if (typeof(T).IsAssignableFrom(typeof(Gene)))
+            {
+                for (int i = 0; i < Size; ++i)
+                {
+                    if (gene.InnovationNumber < ((Gene)(object)list[i]).InnovationNumber)   //Gotta love generics.
+                    {
+                        list.Insert(i, (T)(object)gene);
+                        set.Add((T)(object)gene);
+
+                        return;
+                    }
+                }
+
+                list.Add((T)(object)gene);
+                set.Add((T)(object)gene);
+            }
         }
 
 
