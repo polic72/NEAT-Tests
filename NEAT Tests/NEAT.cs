@@ -13,7 +13,33 @@ namespace NEAT_Tests
     /// </summary>
     public class NEAT
     {
+        /// <summary>
+        /// The maximum number of nodes allowed.
+        /// </summary>
         public const int MAX_NODES = 1048576;
+
+
+        #region C_ Constants
+
+        /// <summary>
+        /// The C1 constant for Genome distancing. See the <see cref="NEAT_Tests.Gene_.Genome.Distance(Genome)"/> 
+        /// remarks for more information.
+        /// </summary>
+        public const int C1 = 1;
+
+        /// <summary>
+        /// The C2 constant for Genome distancing. See the <see cref="NEAT_Tests.Gene_.Genome.Distance(Genome)"/> 
+        /// remarks for more information.
+        /// </summary>
+        public const int C2 = 1;
+
+        /// <summary>
+        /// The C3 constant for Genome distancing. See the <see cref="NEAT_Tests.Gene_.Genome.Distance(Genome)"/> 
+        /// remarks for more information.
+        /// </summary>
+        public const int C3 = 1;
+
+        #endregion C_ Constants
 
 
         private Dictionary<ConnectionGene, ConnectionGene> all_connections;

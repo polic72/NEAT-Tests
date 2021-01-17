@@ -148,5 +148,16 @@ namespace NEAT_Tests
         {
             return set.Remove(obj) && list.Remove(obj);
         }
+
+
+        /// <summary>
+        /// Gets the T at the given index.
+        /// </summary>
+        /// <param name="index">The index to query.</param>
+        /// <returns>The T at the given index, default(T) if not a valid index.</returns>
+        public T this[int index]
+        {
+            get { return Get(index); }
+        }
     }
 }
