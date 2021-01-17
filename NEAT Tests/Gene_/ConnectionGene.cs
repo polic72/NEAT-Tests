@@ -60,7 +60,7 @@ namespace NEAT_Tests.Gene_
             {
                 if (From == connectionGene.From && To == connectionGene.To)
                 {
-
+                    return true;
                 }
             }
 
