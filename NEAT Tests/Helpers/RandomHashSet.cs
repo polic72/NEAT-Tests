@@ -66,7 +66,7 @@ namespace NEAT_Tests
         /// Gets a radom element in this RandomHashSet.
         /// </summary>
         /// <returns>Random T object if there is any in there, default(T) otherwise.</returns>
-        public T GetRandomElemnt()
+        public T GetRandomElement()
         {
             if (set.Count > 0)
             {

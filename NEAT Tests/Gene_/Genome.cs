@@ -20,6 +20,8 @@ namespace NEAT_Tests.Gene_
     /// </remarks>
     public class Genome
     {
+        #region Properties
+
         /// <summary>
         /// The ConnectionGenes.
         /// </summary>
@@ -36,6 +38,11 @@ namespace NEAT_Tests.Gene_
         /// </summary>
         public NEAT NEAT { get; private set; }
 
+        #endregion Properties
+
+
+        private Random random;
+
 
         /// <summary>
         /// Constructs a Genome with the given NEAT.
@@ -47,7 +54,10 @@ namespace NEAT_Tests.Gene_
             Nodes = new RandomHashSet<NodeGene>();
 
             NEAT = neat;
+
+            random = new Random();
         }
+
 
 
         /// <summary>
@@ -55,12 +65,14 @@ namespace NEAT_Tests.Gene_
         /// </summary>
         /// <param name="neat">The NEAT this Genome is a part of.</param>
         /// <param name="capacity">The capacity of the Genome.</param>
-        public Genome(NEAT neat, int capacity)
+        public Genome(NEAT neat, int capacity, Random random)
         {
             Connections = new RandomHashSet<ConnectionGene>(capacity);
             Nodes = new RandomHashSet<NodeGene>(capacity);
 
             NEAT = neat;
+
+            this.random = random;
         }
 
 
@@ -240,12 +252,164 @@ namespace NEAT_Tests.Gene_
         }
 
 
+        #region Mutate
+
         /// <summary>
         /// Mutates this Genome.
         /// </summary>
         public void Mutate()
         {
-            //TODO
+            if (NEAT.PROBABILITY_MUTATE_LINK > random.NextDouble())
+            {
+                Mutate_Link();
+            }
+
+            if (NEAT.PROBABILITY_MUTATE_NODE > random.NextDouble())
+            {
+                Mutate_Node();
+            }
+
+            if (NEAT.PROBABILITY_MUTATE_WEIGHTSHIFT > random.NextDouble())
+            {
+                Mutate_WeightShift();
+            }
+
+            if (NEAT.PROBABILITY_MUTATE_WEIGHTRANDOM > random.NextDouble())
+            {
+                Mutate_WeightRandom();
+            }
+
+            if (NEAT.PROBABILITY_MUTATE_TOGGLE > random.NextDouble())
+            {
+                Mutate_LinkToggle();
+            }
         }
+
+
+        /// <summary>
+        /// Mutates the genome by creating a new connection. 
+        /// </summary>
+        public void Mutate_Link()
+        {
+            for (int i = 0; i < NEAT.LINK_ATTEMPTS; ++i)
+            {
+                NodeGene nodeGene_a = Nodes.GetRandomElement();
+                NodeGene nodeGene_b = Nodes.GetRandomElement();
+
+                if (nodeGene_a.X == nodeGene_b.X)
+                {
+                    continue;
+                }
+
+
+                ConnectionGene connectionGene;
+
+                if (nodeGene_a.X < nodeGene_b.X)
+                {
+                    connectionGene = new ConnectionGene(nodeGene_a, nodeGene_b, 0); //Temp innovation number.
+                }
+                else
+                {
+                    connectionGene = new ConnectionGene(nodeGene_b, nodeGene_a, 0); //Temp innovation number.
+                }
+
+                if (Connections.Contains(connectionGene))
+                {
+                    continue;
+                }
+
+
+                connectionGene = NEAT.CreateConnection(connectionGene.From, connectionGene.To);
+                connectionGene.Weight = NEAT.WEIGHT_RANDOM + (random.NextDouble() * 2 - 1);
+
+                Connections.Add_Sorted_Gene(connectionGene);    //This needs to be sorted otherwise something breaks.
+
+                return;
+            }
+        }
+
+
+        /// <summary>
+        /// Mutates a random connection splitting it with a node.
+        /// </summary>
+        public void Mutate_Node()
+        {
+            ConnectionGene connectionGene = Connections.GetRandomElement();
+
+            if (connectionGene == null)
+            {
+                return;
+            }
+
+
+            NodeGene from = connectionGene.From;
+            NodeGene to = connectionGene.To;
+
+            NodeGene created = NEAT.CreateNode();
+
+            created.X = (from.X + to.X) / 2;
+            created.Y = (from.Y + to.Y) / 2 + random.NextDouble() * 0.1 + .05;
+
+            Nodes.Add(created);
+
+
+            ConnectionGene created_connectionGene_1 = NEAT.CreateConnection(from, created);
+            ConnectionGene created_connectionGene_2 = NEAT.CreateConnection(created, to);
+
+            Connections.Remove(connectionGene);
+
+            Connections.Add(created_connectionGene_1);
+            Connections.Add(created_connectionGene_2);
+
+
+            created_connectionGene_1.Weight = 1;                        //Default weight.
+            created_connectionGene_2.Weight = connectionGene.Weight;    //Old connection's weight.
+
+            created_connectionGene_2.Enabled = connectionGene.Enabled;  //Old enabled state.
+        }
+
+
+        /// <summary>
+        /// Mutates a random connection by shifting its weight up or down by a radom value.
+        /// </summary>
+        public void Mutate_WeightShift()
+        {
+            ConnectionGene connectionGene = Connections.GetRandomElement();  //Ayy, finally using this.
+
+            if (connectionGene!= null)
+            {
+                connectionGene.Weight = connectionGene.Weight + NEAT.WEIGHT_RANDOM + (random.NextDouble() * 2 - 1);
+            }
+        }
+
+
+        /// <summary>
+        /// Mutates a random connection by radomizing its weight.
+        /// </summary>
+        public void Mutate_WeightRandom()
+        {
+            ConnectionGene connectionGene = Connections.GetRandomElement();  //Ayy, finally using this.
+
+            if (connectionGene != null)
+            {
+                connectionGene.Weight = NEAT.WEIGHT_RANDOM + (random.NextDouble() * 2 - 1);
+            }
+        }
+
+
+        /// <summary>
+        /// Mutates a random connection by inverting its current Enabled status.
+        /// </summary>
+        public void Mutate_LinkToggle()
+        {
+            ConnectionGene connectionGene = Connections.GetRandomElement();  //Ayy, finally using this.
+
+            if (connectionGene != null)
+            {
+                connectionGene.Enabled = !connectionGene.Enabled;
+            }
+        }
+
+        #endregion Mutate
     }
 }

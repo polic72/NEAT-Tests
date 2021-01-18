@@ -42,6 +42,59 @@ namespace NEAT_Tests
         #endregion C_ Constants
 
 
+        #region Mutations
+
+        /// <summary>
+        /// The strength to adjust the weight during <see cref="NEAT_Tests.Gene_.Genome.Mutate_WeightShift"/>.
+        /// </summary>
+        public const double WEIGHT_SHIFT = 0.3;
+
+        /// <summary>
+        /// The value to be the min/max [-value, value) for the 
+        /// <see cref="NEAT_Tests.Gene_.Genome.Mutate_WeightRandom"/> and 
+        /// <see cref="NEAT_Tests.Gene_.Genome.Mutate_Link"/>.
+        /// </summary>
+        public const double WEIGHT_RANDOM = 1;
+
+
+        /// <summary>
+        /// The number of times to attempt to mutate a new link.
+        /// </summary>
+        public const int LINK_ATTEMPTS = 100;
+
+
+        #region Probabilities
+
+        /// <summary>
+        /// The probability that a link mutation will occur.
+        /// </summary>
+        public const double PROBABILITY_MUTATE_LINK = 0.4;
+
+        /// <summary>
+        /// The probability that a node mutation will occur.
+        /// </summary>
+        public const double PROBABILITY_MUTATE_NODE = 0.4;
+
+        /// <summary>
+        /// The probability that a weight shift mutation will occur.
+        /// </summary>
+        public const double PROBABILITY_MUTATE_WEIGHTSHIFT = 0.4;
+
+        /// <summary>
+        /// The probability that a weight random mutation will occur.
+        /// </summary>
+        public const double PROBABILITY_MUTATE_WEIGHTRANDOM = 0.4;
+
+        /// <summary>
+        /// The probability that a toggle mutation will occur.
+        /// </summary>
+        public const double PROBABILITY_MUTATE_TOGGLE = 0.4;
+
+        #endregion Probabilities
+
+        #endregion Mutations
+
+
         private Dictionary<ConnectionGene, ConnectionGene> all_connections;
         private List<NodeGene> all_nodes;
 
