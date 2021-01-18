@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using NEAT_Tests.Calculation;
+
 namespace NEAT_Tests.Gene_
 {
     /// <summary>
@@ -42,6 +44,8 @@ namespace NEAT_Tests.Gene_
 
 
         private Random random;
+
+        private Calculator calculator;
 
 
         /// <summary>
@@ -411,5 +415,21 @@ namespace NEAT_Tests.Gene_
         }
 
         #endregion Mutate
+
+
+        /// <summary>
+        /// Runs the feed-forward method of the NN and returns the output.
+        /// </summary>
+        /// <param name="input">The values for the input nodes of the NN.</param>
+        /// <returns>The output of the NN.</returns>
+        public double[] Calculate(params double[] input)
+        {
+            if (calculator == null)
+            {
+                calculator = new Calculator(this);
+            }
+
+            return calculator.Calculate(input);
+        }
     }
 }

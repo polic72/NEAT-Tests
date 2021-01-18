@@ -102,7 +102,7 @@ namespace NEAT_Tests
         /// <param name="gene">The gene to add.</param>
         public void Add_Sorted_Gene(Gene gene)
         {
-            if (typeof(T).IsAssignableFrom(typeof(Gene)))
+            if (typeof(Gene).IsAssignableFrom(typeof(T)))
             {
                 for (int i = 0; i < Size; ++i)
                 {

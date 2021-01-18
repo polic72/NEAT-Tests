@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculation\Calculator.cs" />
+    <Compile Include="Calculation\Connection.cs" />
+    <Compile Include="Calculation\Node.cs" />
     <Compile Include="Gene_\ConnectionGene.cs" />
     <Compile Include="Gene_\Gene.cs" />
     <Compile Include="Gene_\Genome.cs" />

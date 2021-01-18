@@ -40,12 +40,16 @@ namespace NEAT_Tests.Gene_
         /// <summary>
         /// Constructs a connection gene with the given innovation number.
         /// </summary>
+        /// <param name="from">The NodeGene to connect from.</param>
+        /// <param name="to">The NodeGene to connect to.</param>
         /// <param name="innovation_number">The innovation number.</param>
         public ConnectionGene(NodeGene from, NodeGene to, int innovation_number) :
             base(innovation_number)
         {
             From = from;
             To = to;
+
+            Enabled = true;
         }
 
 
