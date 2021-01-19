@@ -100,10 +100,23 @@ namespace NEAT_Tests.Gene_
         /// </remarks>
         public double Distance(Genome genome)
         {
-            if (Connections[Connections.Size - 1].InnovationNumber
-                < genome.Connections[genome.Connections.Size - 1].InnovationNumber)
+            if (Connections.Size != 0 && genome.Connections.Size != 0)  //Fixes IndexOutOfRangeException.
             {
-                return genome.Distance(this);   //Handles excess properly.
+                if (Connections[Connections.Size - 1].InnovationNumber
+                < genome.Connections[genome.Connections.Size - 1].InnovationNumber)
+                {
+                    return genome.Distance(this);   //Handles excess properly.
+                }
+            }
+            else
+            {
+                int my_size = Connections.Size;
+                int their_size = genome.Connections.Size;
+
+                if (my_size < their_size)
+                {
+                    return genome.Distance(this);   //Handles excess properly.
+                }
             }
 
 
@@ -173,10 +186,23 @@ namespace NEAT_Tests.Gene_
         /// <returns>The crossed-over Genome.</returns>
         public static Genome CrossOver(Genome genome_1, Genome genome_2, Random random)
         {
-            if (genome_1.Connections[genome_1.Connections.Size - 1].InnovationNumber
-                < genome_2.Connections[genome_2.Connections.Size - 1].InnovationNumber)
+            if (genome_1.Connections.Size != 0 && genome_2.Connections.Size != 0)   //Fixes IndexOutOfRangeException.
             {
-                return CrossOver(genome_2, genome_1, random);   //Handles excess properly.
+                if (genome_1.Connections[genome_1.Connections.Size - 1].InnovationNumber
+                < genome_2.Connections[genome_2.Connections.Size - 1].InnovationNumber)
+                {
+                    return CrossOver(genome_2, genome_1, random);   //Handles excess properly.
+                }
+            }
+            else
+            {
+                int first_size = genome_1.Connections.Size;
+                int second_size = genome_2.Connections.Size;
+
+                if (first_size < second_size)
+                {
+                    return CrossOver(genome_2, genome_1, random);   //Handles excess properly.
+                }
             }
 
 
@@ -424,12 +450,12 @@ namespace NEAT_Tests.Gene_
         /// <returns>The output of the NN.</returns>
         public double[] Calculate(params double[] input)
         {
-            if (calculator == null)
-            {
-                calculator = new Calculator(this);
-            }
+            //if (calculator == null)
+            //{
+            //    calculator = new Calculator(this);
+            //}
 
-            return calculator.Calculate(input);
+            return new Calculator(this).Calculate(input);
         }
     }
 }
