@@ -8,6 +8,9 @@ using NEAT_Tests.Gene_;
 
 namespace NEAT_Tests.Calculation
 {
+    /// <summary>
+    /// A calculator for a genome. This does the actual calculations for the NN.
+    /// </summary>
     public class Calculator
     {
         private List<Node> input_nodes = new List<Node>();

@@ -95,6 +95,12 @@ namespace NEAT_Tests
         #endregion Mutations
 
 
+        /// <summary>
+        /// The maximum distance a client can be from its species representative client.
+        /// </summary>
+        public const double MAXIMUM_RACIAL_DIFFERENCE = 4;
+
+
         private Dictionary<ConnectionGene, ConnectionGene> all_connections;
         private List<NodeGene> all_nodes;
 

@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Stonis DLL">
-      <HintPath>..\..\Stonis DLL\Stonis DLL\bin\x64\Debug\Stonis DLL.dll</HintPath>
+      <HintPath>..\..\Stonis-DLL\Stonis DLL\bin\x64\Debug\Stonis DLL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +49,7 @@
     <Compile Include="Calculation\Calculator.cs" />
     <Compile Include="Calculation\Connection.cs" />
     <Compile Include="Calculation\Node.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="Gene_\ConnectionGene.cs" />
     <Compile Include="Gene_\Gene.cs" />
     <Compile Include="Gene_\Genome.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="NEAT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Species.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

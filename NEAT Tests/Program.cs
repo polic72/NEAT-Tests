@@ -12,18 +12,18 @@ namespace NEAT_Tests
     {
         static void Main(string[] args)
         {
-            NEAT neat = new NEAT(2, 1, 5);
+            //NEAT neat = new NEAT(2, 1, 5);
 
-            Genome genome = neat.CreateGenome();
+            //Genome genome = neat.CreateGenome();
 
-            genome.Mutate_Link();
             //genome.Mutate_Link();
+            ////genome.Mutate_Link();
 
-            double[] wegfg = genome.Calculate(1, 1);
+            //double[] wegfg = genome.Calculate(1, 1);
 
-            genome.Mutate_Node();
+            //genome.Mutate_Node();
 
-            double[] defwf = genome.Calculate(1, 1);
+            //double[] defwf = genome.Calculate(1, 1);
         }
     }
 }

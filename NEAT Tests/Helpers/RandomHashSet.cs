@@ -178,6 +178,25 @@ namespace NEAT_Tests
 
 
         /// <summary>
+        /// Sorts the clients by Score.
+        /// </summary>
+        public void Sort()
+        {
+            if (typeof(Client).IsAssignableFrom(typeof(T)))
+            {
+                //List<Client> clients = list.Cast<Client>().ToList();
+
+                //list.Sort(new IComparer<Client>((x, y) => (x.Score < y.Score) ? -1 : ((x.Score > y.Score) ? 1 : 0));
+
+                List<Client> temp = list.Cast<Client>().ToList();
+                temp.Sort(new Comparison<Client>((x, y) => (x.Score < y.Score) ? -1 : ((x.Score > y.Score) ? 1 : 0)));
+
+                list = temp.Cast<T>().ToList();
+            }
+        }
+
+
+        /// <summary>
         /// Gets the T at the given index.
         /// </summary>
         /// <param name="index">The index to query.</param>

@@ -45,8 +45,6 @@ namespace NEAT_Tests.Gene_
 
         private Random random;
 
-        private Calculator calculator;
-
 
         /// <summary>
         /// Constructs a Genome with the given NEAT.
@@ -441,21 +439,5 @@ namespace NEAT_Tests.Gene_
         }
 
         #endregion Mutate
-
-
-        /// <summary>
-        /// Runs the feed-forward method of the NN and returns the output.
-        /// </summary>
-        /// <param name="input">The values for the input nodes of the NN.</param>
-        /// <returns>The output of the NN.</returns>
-        public double[] Calculate(params double[] input)
-        {
-            //if (calculator == null)
-            //{
-            //    calculator = new Calculator(this);
-            //}
-
-            return new Calculator(this).Calculate(input);
-        }
     }
 }
