@@ -101,12 +101,24 @@ namespace NEAT_Tests
         public const double MAXIMUM_RACIAL_DIFFERENCE = 4;
 
 
+        /// <summary>
+        /// The percentage of clients that will survive to the next generation.
+        /// </summary>
+        public const double SURVIVAL_PERCENTAGE = 0.8;
+
+
         private Dictionary<ConnectionGene, ConnectionGene> all_connections;
         private List<NodeGene> all_nodes;
 
-        private int num_genomes;
+        private int num_clients;
 
         private int num_inputs, num_outputs;
+
+        private Random random = new Random();
+
+
+        public RandomHashSet<Client> clients = new RandomHashSet<Client>(); //I literally cannot be bothered to make these properties right now.
+        public RandomHashSet<Species> species = new RandomHashSet<Species>();
 
 
         /// <summary>
@@ -114,11 +126,11 @@ namespace NEAT_Tests
         /// </summary>
         /// <param name="num_inputs">The number of input nodes in the NEAT.</param>
         /// <param name="num_outputs">The number of output nodes in the NEAT.</param>
-        /// <param name="max_genomes">The number of genomes to evolve.</param>
-        public NEAT(int num_inputs, int num_outputs, int num_genomes)
+        /// <param name="num_clients">The number of clients to evolve.</param>
+        public NEAT(int num_inputs, int num_outputs, int num_clients)
         {
 #pragma warning disable 
-            Reset(num_inputs, num_outputs, num_genomes);
+            Reset(num_inputs, num_outputs, num_clients);
 #pragma warning enable
         }
 
@@ -128,14 +140,14 @@ namespace NEAT_Tests
         /// </summary>
         /// <param name="num_inputs">The number of input nodes in the NEAT.</param>
         /// <param name="num_outputs">The number of output nodes in the NEAT.</param>
-        /// <param name="max_genomes">The number of genomes to evolve.</param>
+        /// <param name="num_clients">The number of clients to evolve.</param>
         [Obsolete]
-        public void Reset(int num_inputs, int num_outputs, int num_genomes)
+        public void Reset(int num_inputs, int num_outputs, int num_clients)
         {
             this.num_inputs = num_inputs;
             this.num_outputs = num_outputs;
 
-            this.num_genomes = num_genomes;
+            this.num_clients = num_clients;
 
 
             all_connections = new Dictionary<ConnectionGene, ConnectionGene>();
@@ -143,6 +155,9 @@ namespace NEAT_Tests
 
             all_connections.Clear();
             all_nodes.Clear();
+
+            clients.Clear();
+            species.Clear();    //TODO Might need to remove
 
 
             //Initialize input nodes:
@@ -165,7 +180,171 @@ namespace NEAT_Tests
 
                 nodeGene.Y = (i + 1.0) / (num_outputs + 1.0);
             }
+
+
+            for (int i = 0; i < this.num_clients; ++i)
+            {
+                Client client = new Client();
+
+                client.Geneome = CreateGenome();
+
+                clients.Add(client);
+            }
         }
+
+
+        /// <summary>
+        /// Gets the client at the given index.
+        /// </summary>
+        /// <param name="index">The index of the client.</param>
+        /// <returns>The client at that index.</returns>
+        public Client GetClient(int index)
+        {
+            return clients[index];
+        }
+
+
+        #region Evolution
+
+        /// <summary>
+        /// Evolves this generation of clients.
+        /// </summary>
+        public void Evolve()
+        {
+            GenerateSpecies();
+
+            Kill();
+
+            RemoveExtictSpecies();
+
+            Reproduce();
+
+            Mutate();
+
+
+            for (int i = 0; i < clients.Size; ++i)
+            {
+                clients[i].Generate_Calculator();
+            }
+        }
+
+
+        /// <summary>
+        /// Generates/appends species for all of the stored clients that don't have one.
+        /// </summary>
+        private void GenerateSpecies()
+        {
+            for (int i = 0; i < species.Size; ++i)
+            {
+                species[i].Reset();
+            }
+
+
+            for (int i = 0; i < clients.Size; ++i)
+            {
+                if (clients[i].Species != null)
+                {
+                    continue;
+                }
+
+
+                bool found = false;
+
+                for (int q = 0; q < species.Size; ++q)
+                {
+                    if (species[q].Put(clients[i]))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    species.Add(new Species(clients[i], random));
+                }
+            }
+
+
+            for (int i = 0; i < species.Size; ++i)
+            {
+                species[i].EvaluateScore();
+            }
+        }
+
+
+        /// <summary>
+        /// Kills 1 - <see cref="NEAT_Tests.NEAT.SURVIVAL_PERCENTAGE"/> the clients in each species.
+        /// </summary>
+        private void Kill()
+        {
+            for (int i = 0; i < species.Size; ++i)
+            {
+                species[i].Prune(1 - SURVIVAL_PERCENTAGE);
+            }
+        }
+
+
+        /// <summary>
+        /// Removes any species that should be considered extinct.
+        /// </summary>
+        private void RemoveExtictSpecies()
+        {
+            for (int i = species.Size - 1; i >= 0; --i)
+            {
+                if (species[i].Size <= 1)
+                {
+                    species[i].GoExtict();
+
+                    species.Remove(i);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Reproduces clients that don't have a set species(?) isn't that kinda against the idea?
+        /// </summary>
+        private void Reproduce()
+        {
+            Stonis.ScoredDistribution<Species> selector = new Stonis.ScoredDistribution<Species>(species.Size, random);
+
+            for (int i = 0; i < species.Size; ++i)
+            {
+                selector.Add(species[i], species[i].Score);
+            }
+
+
+            for (int i = 0; i < clients.Size; ++i)
+            {
+                if (clients[i].Species == null)
+                {
+                    Species random_species = selector.ChooseValue();
+
+                    if (random_species == null)
+                    {
+                        random_species = selector.ChooseValue();
+                    }
+
+                    clients[i].Geneome = random_species.Breed();
+                    random_species.ForcePut(clients[i]);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Possibly mutates every client in the genome.
+        /// </summary>
+        private void Mutate()
+        {
+            for (int i = 0; i < clients.Size; ++i)
+            {
+                clients[i].Geneome.Mutate();
+            }
+        }
+
+        #endregion Evolution
 
 
         #region Genome

@@ -129,8 +129,12 @@ namespace NEAT_Tests.Gene_
             double num_similar = 0; //The number of genes that are similar.
 
 
+            bool was_skipped = true;    //The band-aid.
+
             while (index_me < Connections.Size && index_them < genome.Connections.Size)
             {
+                was_skipped = false;
+
                 ConnectionGene connectionGene_me = Connections[index_me];
                 ConnectionGene connectionGene_them = genome.Connections[index_them];
 
@@ -163,6 +167,13 @@ namespace NEAT_Tests.Gene_
 
             //This is why this genome must have the higher innovation number.
             num_excess = Connections.Size - index_me;
+
+
+            if (was_skipped)
+            {
+                return 0;
+            }
+
 
             weight_diff /= num_similar;
 

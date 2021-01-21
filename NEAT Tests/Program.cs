@@ -24,6 +24,28 @@ namespace NEAT_Tests
             //genome.Mutate_Node();
 
             //double[] defwf = genome.Calculate(1, 1);
+
+
+            NEAT neat = new NEAT(10, 1, 1000);
+
+            Random random = new Random();
+
+            double[] inputs = new double[10];
+
+            for (int i = 0; i < inputs.Length; ++i) { inputs[i] = random.NextDouble(); }
+
+
+            for (int i = 0; i < 1000; ++i)
+            {
+                for (int q = 0; q < neat.clients.Size; ++q)
+                {
+                    double score = neat.clients[i].Calculate(inputs)[0];
+
+                    neat.clients[i].Score = score;
+                }
+
+                neat.Evolve();
+            }
         }
     }
 }
